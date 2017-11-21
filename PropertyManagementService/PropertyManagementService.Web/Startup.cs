@@ -6,8 +6,8 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using PropertyManagementService.Web.Data;
-    using PropertyManagementService.Web.Models;
+    using PropertyManagementService.Data;
+    using PropertyManagementService.Domain;
 
     public class Startup
     {
@@ -20,11 +20,11 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<PropertyManagementServiceDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<PropertyManagementServiceDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
