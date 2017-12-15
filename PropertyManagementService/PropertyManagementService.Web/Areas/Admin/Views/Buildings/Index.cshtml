@@ -1,0 +1,117 @@
+﻿@model BuildingsAdminPaginatedModel
+
+@{
+    ViewData["Title"] = "Buildings Index";
+    string searchString = Model.Search == "" ? null : Model.Search;
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <a class="btn btn-success" asp-area="Admin" asp-controller="Buildings" asp-action="Create">Create</a>
+    </div>
+    <div class="searchBar col-md-6">
+        <form method="get" asp-area="Admin" asp-controller="Buildings" asp-action="Index">
+            <input hidden type="text" name="page" value="1" />
+            <input type="search" placeholder="search building..." name="search" value=@searchString />
+            <input class="btn btn-info" type="submit" value="Search" />
+        </form>
+    </div>
+</div>
+
+
+<table class="table table-bordered table-striped table-hover indexTable">
+    <thead>
+        <tr>
+            <th class="col-xs-3">
+                Building Address
+            </th>
+            <th class="col-xs-1">
+                Contract
+            </th>
+            <th class="col-xs-1">
+                Start of service
+            </th>
+            <th class="col-xs-1">
+                End of service
+            </th>
+            <th class="col-xs-1">
+                Manager
+            </th>
+            <th class="col-xs-1">
+                Apartments
+            </th>
+            <th class="col-xs-1">
+                Total living area
+            </th>
+            <th class="col-xs-1">
+                Residents
+            </th>
+            <th class="col-xs-1">
+                Dogs
+            </th>
+            <th class="col-xs-1">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var building in Model.Buildings)
+        {
+            <tr>
+                <td>
+                    @building.Address
+                </td>
+                <td>
+                    @building.Contract
+                </td>
+                <td>
+                    @building.ServiceStartDate.ToShortDateString()
+                </td>
+                <td>
+                    @(building.ServiceEndDate == null ? "" : ((DateTime)building.ServiceEndDate).ToShortDateString() )
+                </td>
+                <td>
+                    @building.ManagerEmail
+                </td>
+                <td>
+                    @building.ApartmentsCount
+                </td>
+                <td>
+                    @building.ApartmentsTotalArea
+                </td>
+                <td>
+                    @building.ResidentsCount
+                </td>
+                <td>
+                    @building.DogsCount
+                </td>
+                <td>
+                    <div>
+                        <a class="btn btn-sm btn-warning" asp-area="Admin" asp-controller="Buildings" asp-action="Edit" asp-route-id=@building.Id>Edit</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    int itemsPerPage = Model.ItemsPerPage;
+    int itemsCount = Model.ItemsCount;
+
+    int currentPage = Model.Page;
+
+    int pageUp = (double)itemsCount / (itemsPerPage * Model.Page) > 1 ? Model.Page + 1 : Model.Page;
+    int pageDown = Model.Page > 1 ? Model.Page - 1 : Model.Page;
+
+    int totalPages = (int)Math.Ceiling(((double)Model.ItemsCount / Model.ItemsPerPage));
+}
+
+<p>Page @Model.Page of @(totalPages < 1 ? 1 : totalPages )</p>
+
+
+<div>
+    <a class="btn btn-default" asp-area="Admin" asp-controller="Buildings" asp-action="Index" asp-all-route-data="@(new Dictionary<string, string> { { "page", pageDown.ToString()}, { "search", Model.Search} })">&#8678;</a>
+    <span class="btn btn-default">@Model.Page</span>
+    <a class="btn btn-default" asp-area="Admin" asp-controller="Buildings" asp-action="Index" asp-all-route-data="@(new Dictionary<string, string> { { "page", pageUp.ToString()}, { "search", Model.Search} })">&#8680;</a>
+</div>

@@ -1,0 +1,48 @@
+﻿@model BuildingCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Building";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <h4>Create a new building</h4>
+            <hr />
+            <div class="form-group">
+                <label asp-for="Contract"></label>
+                <input asp-for="Contract" class="form-control" />
+                <span asp-validation-for="Contract" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceStartDate"></label>
+                <input asp-for="ServiceStartDate" class="form-control" />
+                <span asp-validation-for="ServiceStartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServiceEndDate"></label>
+                <input asp-for="ServiceEndDate" class="form-control" />
+                <span asp-validation-for="ServiceEndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ManagerId"></label>
+                <select asp-for="ManagerId" asp-items="@(new SelectList((IEnumerable<UserEmailModel>)ViewData["Managers"],"Id", "Email"))" class="form-control">
+                    <option> 
+                    </option>
+                </select>
+                <span asp-validation-for="ManagerId" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-default">Create</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

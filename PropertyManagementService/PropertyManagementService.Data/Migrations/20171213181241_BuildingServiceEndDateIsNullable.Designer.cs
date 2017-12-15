@@ -12,9 +12,10 @@ using System;
 namespace PropertyManagementService.Data.Migrations
 {
     [DbContext(typeof(PropertyManagementServiceDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171213181241_BuildingServiceEndDateIsNullable")]
+    partial class BuildingServiceEndDateIsNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

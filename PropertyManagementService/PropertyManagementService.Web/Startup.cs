@@ -1,5 +1,6 @@
 ﻿namespace PropertyManagementService.Web
 {
+    using AutoMapper;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -8,6 +9,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using PropertyManagementService.Data;
     using PropertyManagementService.Domain;
+    using PropertyManagementService.Web.Infrastructure.Extensions;
 
     public class Startup
     {
@@ -23,9 +25,21 @@
             services.AddDbContext<PropertyManagementServiceDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, Role>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredUniqueChars = 1;
+                options.Password.RequiredLength = 4;
+            })
                 .AddEntityFrameworkStores<PropertyManagementServiceDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddDomainServices();
+
+            services.AddAutoMapper();
 
             services.AddMvc();
         }
@@ -34,6 +48,8 @@
         {
             if (env.IsDevelopment())
             {
+                app.MigrateDatabase();
+
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
                 app.UseDatabaseErrorPage();
@@ -51,7 +67,7 @@
             {
                 routes.MapRoute(
                     name: "areas",
-                    template: "{area:exists}{controller=Home}/{action=Index}/{id?}");
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapRoute(
                     name: "default",

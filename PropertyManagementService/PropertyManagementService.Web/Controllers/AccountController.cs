@@ -6,8 +6,10 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Models.AccountViewModels;
+    using PropertyManagementService.Data;
     using PropertyManagementService.Domain;
     using System;
+    using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -16,15 +18,18 @@
     public class AccountController : Controller
     {
         private readonly UserManager<User> userManager;
+        private readonly RoleManager<Role> roleManager;
         private readonly SignInManager<User> signInManager;
         private readonly ILogger logger;
 
         public AccountController(
             UserManager<User> userManager,
+            RoleManager<Role> roleManager,
             SignInManager<User> signInManager,
             ILogger<AccountController> logger)
         {
             this.userManager = userManager;
+            this.roleManager = roleManager;
             this.signInManager = signInManager;
             this.logger = logger;
         }
@@ -212,21 +217,64 @@
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = model.Email, Email = model.Email };
+                var user = new User { UserName = model.Email, Email = model.Email, Name = model.Name};
+
                 var result = await this.userManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
-                    this.logger.LogInformation("User created a new account with password.");
+                    //this.logger.LogInformation("User created a new account with password.");
 
                     await this.signInManager.SignInAsync(user, isPersistent: false);
-                    this.logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+
+                    //this.logger.LogInformation("User created a new account with password.");
+
+                    return await this.AddRole(user, returnUrl);
+
+                    //return RedirectToLocal(returnUrl);
                 }
+
                 AddErrors(result);
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        private async Task<IActionResult> AddRole(User user, string returnUrl)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException("Cannot assign role to null user!");
+            }
+
+            string roleName = string.Empty;
+
+            PropertyManagementServiceDbContext db =
+                (PropertyManagementServiceDbContext)this.HttpContext
+                .RequestServices
+                .GetService(typeof(PropertyManagementServiceDbContext));
+
+            int usersCount = db.Users.Count();
+
+            if (usersCount == 1)
+            {
+                roleName = "Admin";
+            }
+            else
+            {
+                roleName = "Owner";
+            }
+
+            Role role = await this.roleManager.FindByNameAsync(roleName);
+
+            if (role != null)
+            {
+                await this.userManager.AddToRoleAsync(user, roleName);
+
+                await this.userManager.UpdateAsync(user);
+            }
+
+            return RedirectToLocal(returnUrl);
         }
 
         [HttpPost]
@@ -266,10 +314,18 @@
 
             // Sign in the user with this external login provider if the user already has a login.
             var result = await this.signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+
             if (result.Succeeded)
             {
                 this.logger.LogInformation("User logged in with {Name} provider.", info.LoginProvider);
-                return RedirectToLocal(returnUrl);
+
+                string userEmail = info.Principal.Claims.Where(c => c.Type.Contains("emailaddress")).Select(c => c.Value).FirstOrDefault();
+
+                User user = await userManager.FindByEmailAsync(userEmail);
+
+                return await AddRole(user, returnUrl);
+
+                //return RedirectToLocal(returnUrl);
             }
             if (result.IsLockedOut)
             {
