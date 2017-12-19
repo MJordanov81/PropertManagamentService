@@ -37,7 +37,16 @@
                             <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Admin <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="Admin" asp-controller="Buildings" asp-action="Index">Buildings</a></li>
-                                <li><a asp-area="Admin" asp-controller="Users" asp-action="Inex">Users</a></li>
+                                <li><a asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a></li>
+                            </ul>
+                        </li>
+                    }
+                    @if (this.User.IsInRole("Manager"))
+                    {
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Manager <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a asp-area="Manager" asp-controller="Buildings" asp-action="Index">Buildings</a></li>
                             </ul>
                         </li>
                     }

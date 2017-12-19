@@ -10,6 +10,7 @@
     using PropertyManagementService.Data;
     using PropertyManagementService.Domain;
     using PropertyManagementService.Web.Infrastructure.Extensions;
+    using System.Collections.Generic;
 
     public class Startup
     {
@@ -46,10 +47,12 @@
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.MigrateDatabase();
+
+            app.SeedRoles(new List<string> { "Admin", "Owner", "Manager" });
+
             if (env.IsDevelopment())
             {
-                app.MigrateDatabase();
-
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
                 app.UseDatabaseErrorPage();

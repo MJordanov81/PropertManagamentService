@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ManagerId"></label>
-                <select asp-for="ManagerId" asp-items="@(new SelectList((IEnumerable<UserEmailModel>)ViewData["Managers"],"Id", "Email"))" class="form-control">
+                <select asp-for="ManagerId" asp-items="@(new SelectList(Model.Managers,"Id", "Email"))" class="form-control">
                     <option> 
                     </option>
                 </select>

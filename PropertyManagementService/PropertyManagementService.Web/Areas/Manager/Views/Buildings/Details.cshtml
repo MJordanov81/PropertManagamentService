@@ -1,0 +1,117 @@
+﻿@model BuildingManagerDetailsModel
+
+@{
+    ViewData["Title"] = "Building Details";
+}
+
+<h2>
+    Details for building with address: @Model.Address
+</h2>
+
+<div class="row well">
+    <dl>
+        <dt>Contract</dt>
+        <dd>@Model.Contract</dd>
+
+        <dt>Service started</dt>
+        <dd>@Model.ServiceStartDate.ToShortDateString()</dd>
+
+        <dt>Service ended</dt>
+        <dd>@(Model.ServiceEndDate == null ? "" : ((DateTime)Model.ServiceEndDate).ToShortDateString() )</dd>
+
+        <dt>Apartments</dt>
+        <dd>@Model.ApartmentsCount</dd>
+
+        <dt>Total area</dt>
+        <dd>@Model.ApartmentsTotalArea</dd>
+
+        <dt>Residents</dt>
+        <dd>@Model.ResidentsCount</dd>
+
+        <dt>Dogs</dt>
+        <dd>@Model.DogsCount</dd>
+
+        <dt>Outstanding bills</dt>
+        <dd>@Model.UnpaidBills</dd>
+
+        <dt>Outstanding amount</dt>
+        <dd>@Model.UnpaidBillsAmount</dd>
+
+        <dt>Utilities</dt>
+        <dd>@Model.UtilitiesCount</dd>
+    </dl>
+</div>
+<div>
+    <a class="btn btn-success" asp-area="Manager" asp-controller="Apartments" asp-action="Create" asp-route-buildingId=@Model.Id>
+        Add apartment
+    </a>
+    <a class="btn btn-warning" asp-area="Manager" asp-controller="Utilities" asp-action="Index" asp-route-id=@Model.Id>
+        Utilities
+    </a>
+    <a class="btn btn-warning" asp-area="Manager" asp-controller="Bills" asp-action="Index" asp-route-id=@Model.Id>
+        Billing
+    </a>
+</div>
+<div>
+    <table class="table table-bordered table-striped table-hover fixed-table">
+        <thead>
+            <tr>
+                <th>
+                    Number
+                </th>
+                <th>
+                    Owner
+                </th>
+                <th>
+                    Residents
+                </th>
+                <th>
+                    Dogs
+                </th>
+                <th>
+                    Area
+                </th>
+                <th>
+                    Unsubscribed utilities
+                </th>
+                <th>
+                    Outstanding bills
+                </th>
+                <th>
+                    Outstanding amount
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var apartment in Model.Apartments)
+            {
+                <tr>
+                    <td>
+                        @apartment.Number
+                    </td>
+                    <td>
+                        @apartment.OwnerName
+                    </td>
+                    <td>
+                        @apartment.Residents
+                    </td>
+                    <td>
+                        @apartment.Dogs
+                    </td>
+                    <td>
+                        @apartment.Area
+                    </td>
+                    <td>
+                        @apartment.UnsubscribedUtilities
+                    </td>
+                    <td>
+                        @apartment.UnpaidBills
+                    </td>
+                    <td>
+                        @apartment.UnpaidBillsAmount
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

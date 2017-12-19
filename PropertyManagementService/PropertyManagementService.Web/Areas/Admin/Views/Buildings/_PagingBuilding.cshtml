@@ -1,0 +1,22 @@
+﻿@model BuildingsPaginatedModel<BuildingAdminListModel>
+
+@{
+    int itemsPerPage = Model.ItemsPerPage;
+    int itemsCount = Model.ItemsCount;
+
+    int currentPage = Model.Page;
+
+    int pageUp = (double)itemsCount / (itemsPerPage * Model.Page) > 1 ? Model.Page + 1 : Model.Page;
+    int pageDown = Model.Page > 1 ? Model.Page - 1 : Model.Page;
+
+    int totalPages = (int)Math.Ceiling(((double)Model.ItemsCount / Model.ItemsPerPage));
+}
+
+<p>Page @Model.Page of @(totalPages < 1 ? 1 : totalPages )</p>
+
+
+<div>
+    <a class="btn btn-default" asp-area="Admin" asp-controller="Buildings" asp-action="Index" asp-all-route-data="@(new Dictionary<string, string> { { "page", pageDown.ToString()}, { "search", Model.Search} })">&#8678;</a>
+    <span class="btn btn-default">@Model.Page</span>
+    <a class="btn btn-default" asp-area="Admin" asp-controller="Buildings" asp-action="Index" asp-all-route-data="@(new Dictionary<string, string> { { "page", pageUp.ToString()}, { "search", Model.Search} })">&#8680;</a>
+</div>

@@ -24,18 +24,12 @@
 
         public int ResidentsCount { get; set; }
 
-        public int DogsCount { get; set; }
-
-        public int ApartmentsTotalArea { get; set; }
-
         public void Configure(Profile profile)
         {
             profile.CreateMap<Building, BuildingAdminListModel>()
                 .ForMember(m => m.ManagerEmail, cfg => cfg.MapFrom(b => b.Manager.Email))
                 .ForMember(m => m.ApartmentsCount, cfg => cfg.MapFrom(b => b.Apartments.Count))
-                .ForMember(m => m.ApartmentsTotalArea, cfg => cfg.MapFrom(b => b.Apartments.Sum(a => a.Area)))
-                .ForMember(m => m.ResidentsCount, cfg => cfg.MapFrom(b => b.Apartments.Sum(a => a.Residents)))
-                .ForMember(m => m.DogsCount, cfg => cfg.MapFrom(b => b.Apartments.Sum(a => a.Dogs)));
+                .ForMember(m => m.ResidentsCount, cfg => cfg.MapFrom(b => b.Apartments.Sum(a => a.Residents)));
         }
     }
 }

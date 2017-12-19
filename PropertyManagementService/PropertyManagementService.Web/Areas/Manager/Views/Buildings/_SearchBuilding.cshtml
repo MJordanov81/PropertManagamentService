@@ -1,0 +1,11 @@
+﻿@model String
+
+<div class="row">
+    <div class="searchBar col-md-offset-6 col-md-6">
+        <form method="get" asp-area="Manager" asp-controller="Buildings" asp-action="Index">
+            <input hidden type="text" name="page" value="1" />
+            <input type="search" placeholder="search building..." name="search" value=@Model />
+            <input class="btn btn-info" type="submit" value="Search" />
+        </form>
+    </div>
+</div>

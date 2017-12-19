@@ -8,6 +8,7 @@
     using Models.AccountViewModels;
     using PropertyManagementService.Data;
     using PropertyManagementService.Domain;
+    using PropertyManagementService.Services.Contracts;
     using System;
     using System.Linq;
     using System.Security.Claims;
@@ -21,17 +22,20 @@
         private readonly RoleManager<Role> roleManager;
         private readonly SignInManager<User> signInManager;
         private readonly ILogger logger;
+        private readonly IUserService users;
 
         public AccountController(
             UserManager<User> userManager,
             RoleManager<Role> roleManager,
             SignInManager<User> signInManager,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IUserService users)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
             this.logger = logger;
+            this.users = users;
         }
 
         [TempData]
@@ -223,15 +227,11 @@
 
                 if (result.Succeeded)
                 {
-                    //this.logger.LogInformation("User created a new account with password.");
+                    await this.AddRole(user, returnUrl);
 
                     await this.signInManager.SignInAsync(user, isPersistent: false);
 
-                    //this.logger.LogInformation("User created a new account with password.");
-
-                    return await this.AddRole(user, returnUrl);
-
-                    //return RedirectToLocal(returnUrl);
+                    return RedirectToLocal(returnUrl);
                 }
 
                 AddErrors(result);
@@ -240,7 +240,7 @@
             return View(model);
         }
 
-        private async Task<IActionResult> AddRole(User user, string returnUrl)
+        private async Task AddRole(User user, string returnUrl)
         {
             if (user == null)
             {
@@ -271,10 +271,12 @@
             {
                 await this.userManager.AddToRoleAsync(user, roleName);
 
+                await this.users.AddRoleNameToUser(user.Id, roleName);
+
                 await this.userManager.UpdateAsync(user);
             }
 
-            return RedirectToLocal(returnUrl);
+            
         }
 
         [HttpPost]
@@ -323,7 +325,9 @@
 
                 User user = await userManager.FindByEmailAsync(userEmail);
 
-                return await AddRole(user, returnUrl);
+                await AddRole(user, returnUrl);
+
+                return RedirectToLocal(returnUrl);
 
                 //return RedirectToLocal(returnUrl);
             }

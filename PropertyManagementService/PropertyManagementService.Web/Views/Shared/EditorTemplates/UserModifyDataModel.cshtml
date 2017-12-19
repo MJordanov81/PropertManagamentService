@@ -1,0 +1,17 @@
+﻿@model UserModifyDataModel
+
+@{
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input readonly asp-for="Name" class="form-control" />
+    </div>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input readonly asp-for="Email" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Roles"></label>
+                <select asp-for="Roles" asp-items="@(new SelectList((IEnumerable<string>)ViewData["Roles"]))" class="form-control"></select>
+                <span asp-validation-for="Roles" class="text-danger"></span>
+            </div>
+}

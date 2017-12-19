@@ -1,0 +1,69 @@
+﻿@model UsersAdminPaginatedModel
+
+@{
+    ViewData["Title"] = "Users Index";
+    string searchString = Model.Search == "" ? null : Model.Search;
+}
+
+<div class="row">
+    <form method="get" asp-area="Admin" asp-controller="Users" asp-action="Index">
+
+        @Html.Partial("_SearchUser", new UserSearchModel { IncludedRoles = Model.IncludedRoles, SearchString = searchString })
+
+    </form>
+</div>
+
+
+
+<table class="table table-bordered table-striped table-hover indexTable">
+    <thead>
+        <tr>
+            <th class="col-xs-3">
+                Name
+            </th>
+            <th class="col-xs-3">
+                Email
+            </th>
+            <th class="col-xs-1">
+                Buildings as manager
+            </th>
+            <th class="col-xs-1">
+                Apartments as owner
+            </th>
+            <th class="col-xs-1">
+                Roles
+            <th class="col-xs-1">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>
+                    @user.Name
+                </td>
+                <td>
+                    @user.Email
+                </td>
+                <td>
+                    @user.BuildingsAsManager
+                </td>
+                <td>
+                    @user.ApartmentsAsOwner
+                </td>
+                <td>
+                    @(string.Join(Environment.NewLine, user.Roles))
+                </td>
+                <td>
+                    <div>
+                        <a class="btn btn-sm btn-warning" asp-area="Admin" asp-controller="Users" asp-action="Edit" asp-route-id=@user.Id>Edit</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Html.Partial("_PagingUser", Model)

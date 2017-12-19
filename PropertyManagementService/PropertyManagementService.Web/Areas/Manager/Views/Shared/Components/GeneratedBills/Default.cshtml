@@ -1,0 +1,56 @@
+﻿@model BillsForBuildingModel
+@{
+    <div>
+        <table class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>
+                        Apartment
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                    <th>
+                        Due
+                    </th>
+                    <th>
+                        For period
+                    </th>
+                    <th>
+                        For year
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var bill in Model.Bills)
+                {
+                    <tr>
+                        <td>
+                            @bill.Apartment
+                        </td>
+                        <td>
+                            @bill.TotalAmount
+                        </td>
+                        <td>
+                            @bill.DueDate.ToShortDateString()
+                        </td>
+                        <td>
+                            @bill.Period
+                        </td>
+                        <td>
+                            @bill.Year
+                        </td>
+                        <td>
+                            <input type="checkbox" name="bills" value=@bill.Id />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+

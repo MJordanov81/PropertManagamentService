@@ -6,6 +6,8 @@
     {
         public int Id { get; set; }
 
+        public string Number { get; set; }
+
         public int Residents { get; set; }
 
         public int Dogs { get; set; }

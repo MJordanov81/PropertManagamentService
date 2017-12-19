@@ -1,0 +1,83 @@
+﻿@model BuildingsPaginatedModel<BuildingManagerListModel>
+
+@{
+    ViewData["Title"] = "Buildings Index";
+    string searchString = Model.Search == "" ? null : Model.Search;
+}
+
+<h2>Buildings</h2>
+
+@Html.Partial("_SearchBuilding", searchString)
+
+
+<table class="table table-bordered table-striped table-hover indexTable">
+    <thead>
+        <tr>
+            <th class="col-xs-3">
+                Building Address
+            </th>
+            <th class="col-xs-1">
+                Contract
+            </th>
+            <th class="col-xs-1">
+                Start of service
+            </th>
+            <th class="col-xs-1">
+                End of service
+            </th>
+            <th class="col-xs-1">
+                Apartments
+            </th>
+            <th class="col-xs-1">
+                Total living area
+            </th>
+            <th class="col-xs-1">
+                Residents
+            </th>
+            <th class="col-xs-1">
+                Dogs
+            </th>
+            <th class="col-xs-1">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var building in Model.Buildings)
+        {
+            <tr>
+                <td>
+                    @building.Address
+                </td>
+                <td>
+                    @building.Contract
+                </td>
+                <td>
+                    @building.ServiceStartDate.ToShortDateString()
+                </td>
+                <td>
+                    @Html.DisplayFor(m => building.ServiceEndDate)
+                </td>
+                <td>
+                    @building.ApartmentsCount
+                </td>
+                <td>
+                    @building.ApartmentsTotalArea
+                </td>
+                <td>
+                    @building.ResidentsCount
+                </td>
+                <td>
+                    @building.DogsCount
+                </td>
+                <td>
+                    <div>
+                        <a class="btn btn-sm btn-warning" asp-area="Manager" asp-controller="Buildings" asp-action="Details" asp-route-id=@building.Id>Details</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Html.Partial("_PagingBuilding", Model)

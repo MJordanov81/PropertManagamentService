@@ -2,7 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Linq;
 
     public class Bill
     {
@@ -19,6 +20,8 @@
         public bool IsPaid { get; set; }
 
         public int ApartmentId { get; set; }
+
+        public bool IsConfirmed { get; set; }
 
         public Apartment Apartment { get; set; }
 

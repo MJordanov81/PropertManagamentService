@@ -1,0 +1,9 @@
+﻿@model UtilitySearchModel
+
+    <div class="searchBar col-md-offset-6 col-md-6">
+        <form method="get" asp-area="Manager" asp-controller="Utilities" asp-action="Index" asp-route-buildingId=@Model.BuildingId>
+            <input hidden type="text" name="page" value="1" />
+            <input type="search" placeholder="search utility..." name="search" value=@Model.SearchString />
+            <input class="btn btn-info" type="submit" value="Search" />
+        </form>
+    </div>

@@ -9,3 +9,43 @@ table.indexTable{
 div.searchBar{
     text-align:right
 }
+
+dt {
+    float: left;
+    width: 30%;
+    text-align: right;
+    padding: .25em;
+    clear: left;
+}
+
+dd {
+    float: left;
+    width: 60%;
+    padding: .25em 0;
+    margin-left: 15px
+}
+
+dl:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.table-fixed thead {
+    width: 97%;
+}
+
+.table-fixed tbody {
+    height: 230px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+    display: block;
+}
+
+    .table-fixed tbody td, .table-fixed thead > tr > th {
+        float: left;
+        border-bottom-width: 0;
+    }

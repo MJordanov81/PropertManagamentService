@@ -1,11 +1,12 @@
-﻿namespace PropertyManagementService.Services.Models.Building
+﻿namespace PropertyManagementService.Services.Models.Utility
 {
     using System.Collections.Generic;
-    using System.Linq;
 
-    public class BuildingsAdminPaginatedModel
+    public class UtilitiesPaginatedModel
     {
-        public IList<BuildingAdminListModel> Buildings { get; set; }
+        public IList<UtilityBuildingListModel> Utilities { get; set; }
+
+        public int BuildingId { get; set; }
 
         //pagination properties
         public int ItemsPerPage { get; set; }

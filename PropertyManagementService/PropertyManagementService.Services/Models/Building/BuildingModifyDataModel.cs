@@ -2,7 +2,9 @@
 {
     using PropertyManagementService.Common;
     using PropertyManagementService.Domain;
+    using PropertyManagementService.Services.Models.User;
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class BuildingModifyDataModel : IMapFrom<Building>
@@ -29,5 +31,7 @@
 
         [Display(Name = "Manager")]
         public string ManagerId { get; set; }
+
+        public IEnumerable<UserEmailModel> Managers { get; set; } = new List<UserEmailModel>();
     }
 }

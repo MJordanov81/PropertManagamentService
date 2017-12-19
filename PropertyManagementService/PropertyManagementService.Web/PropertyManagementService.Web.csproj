@@ -27,6 +27,11 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Manager\Data\" />
+    <Folder Include="Areas\Owner\Controllers\" />
+    <Folder Include="Areas\Owner\Data\" />
+    <Folder Include="Areas\Owner\Models\" />
+    <Folder Include="Areas\Owner\Views\" />
   </ItemGroup>
 
 </Project>

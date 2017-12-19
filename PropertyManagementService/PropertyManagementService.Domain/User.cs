@@ -12,5 +12,7 @@
         public ICollection<Building> BuildingsAsManager { get; set; } = new List<Building>();
 
         public ICollection<Apartment> ApartmentsAsOwner { get; set; } = new List<Apartment>();
+
+        public ICollection<UserRoleName> RolesNames { get; set; } = new List<UserRoleName>();
     }
 }

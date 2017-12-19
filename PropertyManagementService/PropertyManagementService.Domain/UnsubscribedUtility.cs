@@ -6,8 +6,8 @@
 
         public Apartment Apartment { get; set; }
 
-        public int UtilityId { get; set; }
+        public int BuildingUtilityId { get; set; }
 
-        public Utility Utility { get; set; }
+        public BuildingUtility BuildingUtility { get; set; }
     }
 }

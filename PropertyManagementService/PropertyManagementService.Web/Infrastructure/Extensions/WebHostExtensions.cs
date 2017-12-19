@@ -16,7 +16,6 @@
                 var services = scope.ServiceProvider;
                 var roleManager = services.GetRequiredService<RoleManager<Role>>();
 
-
                 foreach (string roleName in rolesNames)
                 {
                     if (!roleManager.RoleExistsAsync(roleName).Result)

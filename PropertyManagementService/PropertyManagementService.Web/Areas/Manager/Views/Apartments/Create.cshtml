@@ -1,0 +1,51 @@
+﻿@model ApartmentCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Apartment";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <h4>Add a new apartment</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Number"></label>
+                <input asp-for="Number" class="form-control" />
+                <span asp-validation-for="Number" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Residents"></label>
+                <input asp-for="Residents" class="form-control" />
+                <span asp-validation-for="Residents" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Dogs"></label>
+                <input asp-for="Dogs" class="form-control" />
+                <span asp-validation-for="Dogs" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Area"></label>
+                <input asp-for="Area" class="form-control" /> m2
+                <span asp-validation-for="Area" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OwnerId"></label>
+                <select asp-for="OwnerId" asp-items="@(new SelectList(Model.Owners,"Id", "Name"))" class="form-control">
+                    <option></option>
+                </select>
+                <span asp-validation-for="OwnerId" class="text-danger"></span>
+            </div>
+            <div hidden class="form-group">
+                <input asp-for="BuildingId" value=@Model.BuildingId class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-default">Create</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

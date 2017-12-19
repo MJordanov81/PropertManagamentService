@@ -1,0 +1,5 @@
+﻿@model DateTime?
+
+<span>
+    @(Model == null ? "Permanent" : ((DateTime)Model).ToShortDateString() )
+</span>

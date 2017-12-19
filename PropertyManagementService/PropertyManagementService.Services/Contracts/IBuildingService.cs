@@ -7,10 +7,12 @@
     {
         void Create(string contract, string address, DateTime serviceStartDate, DateTime? serviceEndDate, string managerId);
 
-        BuildingsAdminPaginatedModel GetBuildings(string search);
+        BuildingsPaginatedModel<TModel> GetBuildings<TModel>(string search, string managerId = null);
 
         BuildingModifyDataModel GetBuildingToEdit(int buildingId);
 
         void EditBuilding(int buildingId, string contract, string address, DateTime serviceStartDate, DateTime? serviceEndDate, string managerId);
+
+        BuildingManagerDetailsModel GetBuildingDetails(int buildingId);
     }
 }

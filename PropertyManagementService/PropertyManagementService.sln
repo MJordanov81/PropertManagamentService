@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyManagementService.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyManagementService.Services", "PropertyManagementService.Services\PropertyManagementService.Services.csproj", "{B95CC3B7-D007-4DF8-B48A-F0053B1173F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyManagementService.Common", "PropertyManagementService.Common\PropertyManagementService.Common.csproj", "{B733F8B1-8444-41C7-A981-EC373C8F14F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyManagementService.Common", "PropertyManagementService.Common\PropertyManagementService.Common.csproj", "{B733F8B1-8444-41C7-A981-EC373C8F14F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

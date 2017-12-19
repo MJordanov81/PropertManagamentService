@@ -24,6 +24,7 @@
                 Contract = contract,
                 Address = address,
                 ServiceStartDate = serviceStartDate,
+                ServiceEndDate = serviceEndDate,
                 ManagerId = managerId
             });
 
@@ -43,19 +44,53 @@
             this.db.SaveChanges();
         }
 
-        public BuildingsAdminPaginatedModel GetBuildings(string search)
+        public BuildingManagerDetailsModel GetBuildingDetails(int buildingId)
+        {
+            if (!this.db.Buildings.Any(b => b.Id == buildingId))
+            {
+                return null;
+            }
+
+            return this.db.Buildings
+                .Where(b => b.Id == buildingId)
+                .ProjectTo<BuildingManagerDetailsModel>()
+                .FirstOrDefault();
+        }
+
+        public BuildingsPaginatedModel<TModel> GetBuildings<TModel>(string search, string managerId = null)
         {
             Func<string, string, bool> searchPredicate = (address, contract)
                 => address.ToLower().Contains(search.ToLower()) ||
                         contract.ToLower().Contains(search.ToLower());
 
-            return new BuildingsAdminPaginatedModel
+            BuildingsPaginatedModel<TModel> result = new BuildingsPaginatedModel<TModel>
             {
                 ItemsCount = this.db.Buildings.Where(b => searchPredicate(b.Address, b.Contract)).Count(),
                 Buildings = this.db.Buildings.Where(b => searchPredicate(b.Address, b.Contract))
-                .ProjectTo<BuildingAdminListModel>()
+                .ProjectTo<TModel>()
                 .ToList(),
             };
+
+            if (managerId != null)
+            {
+                return new BuildingsPaginatedModel<TModel>
+                {
+                    ItemsCount = this.db.Buildings.Where(b => searchPredicate(b.Address, b.Contract)).Count(),
+                    Buildings = this.db.Buildings.Where(b => searchPredicate(b.Address, b.Contract) && b.ManagerId == managerId)
+                        .ProjectTo<TModel>()
+                        .ToList(),
+                };
+            }
+            else
+            {
+                return new BuildingsPaginatedModel<TModel>
+                {
+                    ItemsCount = this.db.Buildings.Where(b => searchPredicate(b.Address, b.Contract)).Count(),
+                    Buildings = this.db.Buildings.Where(b => searchPredicate(b.Address, b.Contract))
+                        .ProjectTo<TModel>()
+                        .ToList(),
+                };
+            }
         }
 
         public BuildingModifyDataModel GetBuildingToEdit(int buildingId)
@@ -70,5 +105,7 @@
                 .ProjectTo<BuildingModifyDataModel>()
                 .SingleOrDefault();
         }
+
+
     }
 }

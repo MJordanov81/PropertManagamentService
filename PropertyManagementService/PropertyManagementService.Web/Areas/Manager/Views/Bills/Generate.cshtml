@@ -1,0 +1,70 @@
+﻿@model int
+
+@{
+    ViewData["Title"] = "Generate Bills";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        Generate bills for period
+        <form method="POST" asp-area="Manager" asp-controller="Bills" asp-action="Generate">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div hidden>
+                <input name="buildingId" value=@Model />
+            </div>
+            <label>Period: <input class="form-control" type="number" min="0" max="12" step="1" name="period" /></label>
+            <label>Year: <input class="form-control" type="number" min=@DateTime.Now.Year step="1" name="year" /></label>
+            <input class="form-control" type="submit" value="Generate" />
+        </form>
+    </div>
+
+
+    <div class="col-sm-12">
+        <div>
+            <a id="confirmButton" class="btn btn btn-info">Confirm selected</a>
+            <a id="deleteButton" class="btn btn btn-info">Delete selected</a>
+        </div>
+        <h3>
+            Not confirmed bills
+        </h3>
+        <div id="container">
+            @await Component.InvokeAsync("GeneratedBills", new { id = Model })
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        $('#deleteButton').click(function () {
+
+            var data = { 'bills': [] };
+            $(":checked").each(function () {
+                data['bills'].push($(this).val());
+            });
+            $.post("/manager/bills/deleteMultiple", data);
+
+            $("#container").load('manager/bills/updateGeneratedBills/' + @Model);
+
+        });
+
+        $('#confirmButton').click(function () {
+
+            var data = { 'bills': [] };
+            $(":checked").each(function () {
+                data['bills'].push($(this).val());
+            });
+            $.post("/manager/bills/confirmMultiple", data);
+        });
+
+    </script>
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

@@ -6,8 +6,8 @@
 
         public Bill Bill { get; set; }
 
-        public int UtilityBuildingId { get; set; }
+        public int BuildingUtilityId { get; set; }
 
-        public UtilityBuilding UtilityBuilding { get; set; }
+        public BuildingUtility BuildingUtility { get; set; }
     }
 }

@@ -24,6 +24,6 @@
 
         public ICollection<Apartment> Apartments { get; set; } = new List<Apartment>();
 
-        public ICollection<UtilityBuilding> Utilities { get; set; } = new List<UtilityBuilding>();
+        public ICollection<BuildingUtility> Utilities { get; set; } = new List<BuildingUtility>();
     }
 }

@@ -1,0 +1,72 @@
+﻿@model UtilitiesPaginatedModel
+
+@{
+    ViewData["Title"] = "Building Utilities";
+    string searchString = Model.Search == "" ? null : Model.Search;
+}
+
+<h2>Utilities</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <a class="btn btn-success" asp-area="Manager" asp-controller="Utilities" asp-route-id=@Model.BuildingId asp-action="Create">Add utility</a>
+    </div>
+
+    @Html.Partial("_SearchUtility", new UtilitySearchModel { SearchString = searchString, BuildingId = Model.BuildingId })
+
+</div>
+
+
+<table class="table table-bordered table-striped table-hover indexTable">
+    <thead>
+        <tr>
+            <th class="col-xs-3">
+                Name
+            </th>
+            <th class="col-xs-1">
+                Price
+            </th>
+            <th class="col-xs-1">
+                Routine
+            </th>
+            <th class="col-xs-1">
+                Is subscribable
+            </th>
+            <th class="col-xs-1">
+                Is per resident
+            </th>
+            <th class="col-xs-1">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var utility in Model.Utilities)
+        {
+            <tr>
+                <td>
+                    @utility.Name
+                </td>
+                <td>
+                    @utility.Price
+                </td>
+                <td>
+                    @utility.Routine
+                </td>
+                <td>
+                    @(utility.IsSubscribable ? "YES" : "NO")
+                </td>
+                <td>
+                    @(utility.IsPerResident ? "YES" : "NO")
+                </td>
+                <td>
+                    <div>
+                        <a class="btn btn-sm btn-warning" asp-area="Manager" asp-controller="Utilities" asp-action="Edit" asp-route-utilityId=@utility.UtilityId asp-route-buildingId=@Model.BuildingId>Edit</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Html.Partial("_PagingUtility", Model)

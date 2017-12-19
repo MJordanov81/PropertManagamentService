@@ -116,11 +116,16 @@ namespace PropertyManagementService.Data.Migrations
 
                     b.Property<int>("Dogs");
 
+                    b.Property<string>("Number")
+                        .IsRequired();
+
                     b.Property<string>("OwnerId");
 
                     b.Property<int>("Residents");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Number");
 
                     b.HasIndex("BuildingId");
 
@@ -137,6 +142,8 @@ namespace PropertyManagementService.Data.Migrations
                     b.Property<int>("ApartmentId");
 
                     b.Property<DateTime>("DueDate");
+
+                    b.Property<bool>("IsConfirmed");
 
                     b.Property<bool>("IsPaid");
 
@@ -157,17 +164,13 @@ namespace PropertyManagementService.Data.Migrations
                 {
                     b.Property<int>("BillId");
 
-                    b.Property<int>("UtilityBuildingId");
+                    b.Property<int>("BuildingUtilityId");
 
-                    b.Property<int?>("UtilityBuildingBuildingId");
+                    b.HasKey("BillId", "BuildingUtilityId");
 
-                    b.Property<int?>("UtilityBuildingUtilityId");
+                    b.HasIndex("BuildingUtilityId");
 
-                    b.HasKey("BillId", "UtilityBuildingId");
-
-                    b.HasIndex("UtilityBuildingUtilityId", "UtilityBuildingBuildingId");
-
-                    b.ToTable("BillUtility");
+                    b.ToTable("BillUtilities");
                 });
 
             modelBuilder.Entity("PropertyManagementService.Domain.Building", b =>
@@ -192,6 +195,38 @@ namespace PropertyManagementService.Data.Migrations
                     b.HasIndex("ManagerId");
 
                     b.ToTable("Buildings");
+                });
+
+            modelBuilder.Entity("PropertyManagementService.Domain.BuildingUtility", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BuildingId");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<bool>("IsPerResident");
+
+                    b.Property<bool>("IsSubscribable");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<decimal>("Price");
+
+                    b.Property<int>("Routine");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Name");
+
+                    b.HasIndex("BuildingId");
+
+                    b.ToTable("BuildingUtilities");
                 });
 
             modelBuilder.Entity("PropertyManagementService.Domain.Role", b =>
@@ -222,13 +257,13 @@ namespace PropertyManagementService.Data.Migrations
                 {
                     b.Property<int>("ApartmentId");
 
-                    b.Property<int>("UtilityId");
+                    b.Property<int>("BuildingUtilityId");
 
-                    b.HasKey("ApartmentId", "UtilityId");
+                    b.HasKey("ApartmentId", "BuildingUtilityId");
 
-                    b.HasIndex("UtilityId");
+                    b.HasIndex("BuildingUtilityId");
 
-                    b.ToTable("UnsubscribedUtility");
+                    b.ToTable("UnsubscribedUtilities");
                 });
 
             modelBuilder.Entity("PropertyManagementService.Domain.User", b =>
@@ -285,41 +320,15 @@ namespace PropertyManagementService.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("PropertyManagementService.Domain.Utility", b =>
+            modelBuilder.Entity("PropertyManagementService.Domain.UserRoleName", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("UserId");
 
-                    b.Property<string>("Description")
-                        .IsRequired();
+                    b.Property<string>("RoleName");
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.HasKey("UserId", "RoleName");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Utilities");
-                });
-
-            modelBuilder.Entity("PropertyManagementService.Domain.UtilityBuilding", b =>
-                {
-                    b.Property<int>("UtilityId");
-
-                    b.Property<int>("BuildingId");
-
-                    b.Property<bool>("IsPerResident");
-
-                    b.Property<bool>("IsSubscribable");
-
-                    b.Property<decimal>("Price");
-
-                    b.Property<int>("Routine");
-
-                    b.HasKey("UtilityId", "BuildingId");
-
-                    b.HasIndex("BuildingId");
-
-                    b.ToTable("BuildingUtilities");
+                    b.ToTable("UserRoleNames");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -392,11 +401,12 @@ namespace PropertyManagementService.Data.Migrations
                     b.HasOne("PropertyManagementService.Domain.Bill", "Bill")
                         .WithMany("Utilities")
                         .HasForeignKey("BillId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("PropertyManagementService.Domain.UtilityBuilding", "UtilityBuilding")
+                    b.HasOne("PropertyManagementService.Domain.BuildingUtility", "BuildingUtility")
                         .WithMany()
-                        .HasForeignKey("UtilityBuildingUtilityId", "UtilityBuildingBuildingId");
+                        .HasForeignKey("BuildingUtilityId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PropertyManagementService.Domain.Building", b =>
@@ -406,29 +416,32 @@ namespace PropertyManagementService.Data.Migrations
                         .HasForeignKey("ManagerId");
                 });
 
+            modelBuilder.Entity("PropertyManagementService.Domain.BuildingUtility", b =>
+                {
+                    b.HasOne("PropertyManagementService.Domain.Building", "Building")
+                        .WithMany("Utilities")
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("PropertyManagementService.Domain.UnsubscribedUtility", b =>
                 {
                     b.HasOne("PropertyManagementService.Domain.Apartment", "Apartment")
                         .WithMany("UnsubscribedUtilities")
                         .HasForeignKey("ApartmentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("PropertyManagementService.Domain.Utility", "Utility")
+                    b.HasOne("PropertyManagementService.Domain.BuildingUtility", "BuildingUtility")
                         .WithMany()
-                        .HasForeignKey("UtilityId")
+                        .HasForeignKey("BuildingUtilityId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("PropertyManagementService.Domain.UtilityBuilding", b =>
+            modelBuilder.Entity("PropertyManagementService.Domain.UserRoleName", b =>
                 {
-                    b.HasOne("PropertyManagementService.Domain.Building", "Building")
-                        .WithMany("Utilities")
-                        .HasForeignKey("BuildingId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("PropertyManagementService.Domain.Utility", "Utility")
-                        .WithMany("Buildings")
-                        .HasForeignKey("UtilityId")
+                    b.HasOne("PropertyManagementService.Domain.User", "User")
+                        .WithMany("RolesNames")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

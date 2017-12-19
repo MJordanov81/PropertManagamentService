@@ -1,0 +1,17 @@
+﻿@model UserSearchModel
+
+<div class="searchBar col-md-offset-6 col-md-6">
+    <div>
+        @foreach (var role in Model.IncludedRoles)
+        {
+            string isChecked = role.Value ? "checked" : "";
+
+            @role.Key <input class="checkbox-inline" type="checkbox" name="roles" value=@role.Key @isChecked />
+        }
+    </div>
+
+    <input hidden type="text" name="page" value="1" />
+    <input type="search" placeholder="search users..." name="search" value=@Model.SearchString />
+    <input class="btn btn-info" type="submit" value="Search" />
+</div>
+

@@ -1,12 +1,12 @@
 ﻿namespace PropertyManagementService.Web.Areas.Admin.Controllers
 {
+    using Infrastructure.Constants;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using PropertyManagementService.Services.Contracts;
     using PropertyManagementService.Services.Models.Building;
     using PropertyManagementService.Web.Areas.Admin.Models.Buildings;
     using System.Linq;
-    using System.Threading.Tasks;
 
     [Area("Admin")]
     [Authorize(Roles="Admin")]
@@ -29,11 +29,11 @@
                 search = string.Empty;
             }
 
-            BuildingsAdminPaginatedModel buildings = this.buildings.GetBuildings(search);
+            BuildingsPaginatedModel<BuildingAdminListModel> buildings = this.buildings.GetBuildings<BuildingAdminListModel>(search);
 
             buildings.Search = search;
             buildings.Page = page;
-            buildings.ItemsPerPage = 5;
+            buildings.ItemsPerPage = Constants.ItemsPerPageBuildings;
 
             buildings.Buildings = buildings.Buildings.Skip(buildings.ItemsPerPage * (page - 1)).Take(buildings.ItemsPerPage).ToList();
 
@@ -42,9 +42,12 @@
 
         public IActionResult Create()
         {
-            this.ViewData["Managers"] = this.users.GetUsersEmailsList("Manager");
+            BuildingCreateViewModel model = new BuildingCreateViewModel
+            {
+                Managers = this.users.GetUsersEmailsList("Manager")
+        };
 
-            return this.View();
+            return this.View(model);
         }
 
         [HttpPost]
@@ -53,6 +56,8 @@
         {
             if (!ModelState.IsValid)
             {
+                model.Managers = this.users.GetUsersEmailsList("Manager");
+
                 return this.View(model);
             }
 
@@ -70,7 +75,7 @@
                 return this.NotFound();
             }
 
-            this.ViewData["Managers"] = this.users.GetUsersEmailsList("Manager");
+            building.Managers = this.users.GetUsersEmailsList("Manager");
 
             return this.View(building);
         }
