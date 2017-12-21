@@ -4,114 +4,190 @@
     ViewData["Title"] = "Building Details";
 }
 
-<h2>
-    Details for building with address: @Model.Address
-</h2>
 
-<div class="row well">
-    <dl>
-        <dt>Contract</dt>
-        <dd>@Model.Contract</dd>
-
-        <dt>Service started</dt>
-        <dd>@Model.ServiceStartDate.ToShortDateString()</dd>
-
-        <dt>Service ended</dt>
-        <dd>@(Model.ServiceEndDate == null ? "" : ((DateTime)Model.ServiceEndDate).ToShortDateString() )</dd>
-
-        <dt>Apartments</dt>
-        <dd>@Model.ApartmentsCount</dd>
-
-        <dt>Total area</dt>
-        <dd>@Model.ApartmentsTotalArea</dd>
-
-        <dt>Residents</dt>
-        <dd>@Model.ResidentsCount</dd>
-
-        <dt>Dogs</dt>
-        <dd>@Model.DogsCount</dd>
-
-        <dt>Outstanding bills</dt>
-        <dd>@Model.UnpaidBills</dd>
-
-        <dt>Outstanding amount</dt>
-        <dd>@Model.UnpaidBillsAmount</dd>
-
-        <dt>Utilities</dt>
-        <dd>@Model.UtilitiesCount</dd>
-    </dl>
+<div class="row">
+    <div class="col-sm-8 table-title">
+        <div class="col-sm-5">
+            <h2>
+                @Model.Address
+            </h2>
+        </div>
+        <div class="pull-right">
+            <a class="btn btn-warning" asp-area="Manager" asp-controller="Utilities" asp-action="Index" asp-route-id=@Model.Id>
+                Utilities
+            </a>
+            <a class="btn btn-warning" asp-area="Manager" asp-controller="Bills" asp-action="Index" asp-route-id=@Model.Id>
+                Billing
+            </a>
+        </div>
+    </div>
 </div>
-<div>
-    <a class="btn btn-success" asp-area="Manager" asp-controller="Apartments" asp-action="Create" asp-route-buildingId=@Model.Id>
-        Add apartment
-    </a>
-    <a class="btn btn-warning" asp-area="Manager" asp-controller="Utilities" asp-action="Index" asp-route-id=@Model.Id>
-        Utilities
-    </a>
-    <a class="btn btn-warning" asp-area="Manager" asp-controller="Bills" asp-action="Index" asp-route-id=@Model.Id>
-        Billing
-    </a>
+
+
+<div class="row space-after">
+    <div class="col-sm-8">
+        <div class="row">
+            <div class="info-box col-sm-4">
+                <div class="well">
+                    Contract:
+                    <h5>@Model.Contract</h5>
+                </div>
+            </div>
+
+            <div class="info-box col-sm-4">
+                <div class="well">
+                    Service started:
+                    <h5>@Model.ServiceStartDate.ToShortDateString()</h5>
+                </div>
+            </div>
+
+            <div class="info-box col-sm-4">
+                <div class="well">
+                    Service ended:
+                    <h5>@Html.DisplayFor(m => m.ServiceEndDate)</h5>
+                </div>
+            </div>
+            </div>
+
+            <div class="row">
+            <div class="info-box col-sm-3">
+                <div class="well">
+                    Apartments:
+                    <h5>@Model.ApartmentsCount</h5>
+                </div>
+            </div>
+
+            <div class="info-box col-sm-3">
+                <div class="well">
+                    Total area:
+                    <h5>@Model.ApartmentsTotalArea</h5>
+                </div>
+            </div>
+
+            <div class="info-box col-sm-2">
+                <div class="well">
+                    Residents:
+                    <h5>@Model.ResidentsCount</h5>
+                </div>
+            </div>
+
+            <div class="info-box col-sm-2">
+                <div class="well">
+                    Dogs:
+                    <h5>@Model.DogsCount</h5>
+                </div>
+            </div>
+
+            <div class="info-box col-sm-2">
+                <div class="well">
+                    Utilities:
+                    <h5>@Model.UtilitiesCount</h5>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="info-box accent col-sm-6">
+                <div class="well">
+                    Outstanding bills:
+                    <h5>@Model.UnpaidBills</h5>
+                </div>
+            </div>
+
+            <div class="info-box accent col-sm-6">
+                <div class="well">
+                    Outstanding amount:
+                    <h5>@Model.UnpaidBillsAmount</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <img src=@Model.ImageUrl style="width:100%"/>
+    </div>
 </div>
-<div>
-    <table class="table table-bordered table-striped table-hover fixed-table">
-        <thead>
-            <tr>
-                <th>
-                    Number
-                </th>
-                <th>
-                    Owner
-                </th>
-                <th>
-                    Residents
-                </th>
-                <th>
-                    Dogs
-                </th>
-                <th>
-                    Area
-                </th>
-                <th>
-                    Unsubscribed utilities
-                </th>
-                <th>
-                    Outstanding bills
-                </th>
-                <th>
-                    Outstanding amount
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var apartment in Model.Apartments)
-            {
+
+
+
+<div class="row">
+    <div class="col-sm-12 table-title">
+        <div class="col-sm-8">
+            <h3> Apartments </h3>
+        </div>
+        <div class="pull-right">
+            <a class="btn btn-success" asp-area="Manager" asp-controller="Apartments" asp-action="Create" asp-route-buildingId=@Model.Id>
+                Add apartment
+            </a>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped table-hover fixed-table">
+            <thead>
                 <tr>
-                    <td>
-                        @apartment.Number
-                    </td>
-                    <td>
-                        @apartment.OwnerName
-                    </td>
-                    <td>
-                        @apartment.Residents
-                    </td>
-                    <td>
-                        @apartment.Dogs
-                    </td>
-                    <td>
-                        @apartment.Area
-                    </td>
-                    <td>
-                        @apartment.UnsubscribedUtilities
-                    </td>
-                    <td>
-                        @apartment.UnpaidBills
-                    </td>
-                    <td>
-                        @apartment.UnpaidBillsAmount
-                    </td>
+                    <th>
+                        Number
+                    </th>
+                    <th>
+                        Owner
+                    </th>
+                    <th>
+                        Residents
+                    </th>
+                    <th>
+                        Dogs
+                    </th>
+                    <th>
+                        Area
+                    </th>
+                    <th>
+                        Unsubscribed utilities
+                    </th>
+                    <th>
+                        Outstanding bills
+                    </th>
+                    <th>
+                        Outstanding amount
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var apartment in Model.Apartments)
+                {
+                    <tr>
+                        <td>
+                            @apartment.Number
+                        </td>
+                        <td>
+                            @apartment.OwnerName
+                        </td>
+                        <td>
+                            @apartment.Residents
+                        </td>
+                        <td>
+                            @apartment.Dogs
+                        </td>
+                        <td>
+                            @apartment.Area
+                        </td>
+                        <td>
+                            @apartment.UnsubscribedUtilities
+                        </td>
+                        <td>
+                            @apartment.UnpaidBills
+                        </td>
+                        <td>
+                            @apartment.UnpaidBillsAmount
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
 </div>
+
+<a class="btn btn-default" asp-area="Manager" asp-controller="Buildings" asp-action="Index">
+    Back
+</a>

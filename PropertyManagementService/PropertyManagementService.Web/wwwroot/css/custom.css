@@ -1,13 +1,17 @@
-﻿body{
-    margin-top:20px;
+﻿body {
+    margin-top: 20px;
+    background: url("http://hdwallpaperbackgrounds.net/wp-content/uploads/2015/11/Beautiful-Building-HD-Wallpapers-Architecture.jpg") !important;
+    background-repeat: no-repeat;
+    background-size: auto;
 }
 
-table.indexTable{
-    margin-top:20px;
+table.indexTable {
+    margin-top: 20px;
 }
 
-div.searchBar{
-    text-align:right
+div.searchBar {
+    text-align: right;
+    float: left;
 }
 
 dt {
@@ -49,3 +53,66 @@ dl:after {
         float: left;
         border-bottom-width: 0;
     }
+
+
+.table-title {
+    padding: 25px 15px 10px 0;
+}
+
+    .table-title h3,
+    .table-title h2 {
+        margin-top: 0 !important;
+    }
+
+.bill-generator {
+    background-color: transparent;
+    border: 1px solid #808080;
+    padding: 0 !important;
+    line-height: 80px;
+    border-radius: 6px;
+}
+
+.dark-grey {
+    background-color: #2D3237;
+    
+    /*width: 100%;*/
+    height: 100%;
+    border-top-right-radius:6px;
+    border-bottom-right-radius: 6px;
+}
+
+.label {
+    margin-right: 15px;
+}
+
+.info-box {
+    /*margin-right: -15px !important;*/
+}
+
+    .info-box h5 {
+        /*border-radius:10px;*/
+        color: #ff6a00;
+        font-size: 18px;
+        font-weight: 200;
+    }
+
+.accent h5 {
+    color: #75E504;
+}
+
+.space-after {
+    margin-bottom: 25px;
+}
+
+.role p {
+    line-height: .8em;
+}
+
+.checkbox-inline {
+    margin-right: 5px !important;
+}
+
+.affectedBills-label {
+    margin-top: 2px;
+    font-size: 21px;
+}

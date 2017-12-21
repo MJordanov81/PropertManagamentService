@@ -22,5 +22,7 @@
         User GetUser(string userId);
 
         IEnumerable<OwnerNameModel> GetOwners();
+
+        IEnumerable<string> GetRolesNamesForUser(string userName);
     }
 }

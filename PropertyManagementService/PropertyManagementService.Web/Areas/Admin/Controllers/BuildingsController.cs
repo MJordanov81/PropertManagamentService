@@ -61,7 +61,7 @@
                 return this.View(model);
             }
 
-            this.buildings.Create(model.Contract, model.Address, model.ServiceStartDate, model.ServiceEndDate, model.ManagerId);
+            this.buildings.Create(model.Contract, model.Address, model.ServiceStartDate, model.ServiceEndDate, model.ManagerId, model.ImageUrl);
 
             return RedirectToAction(nameof(BuildingsController.Index));
         }
@@ -89,7 +89,7 @@
                 return this.View(model);
             }
 
-            this.buildings.EditBuilding(id, model.Contract, model.Address, model.ServiceStartDate, model.ServiceEndDate, model.ManagerId);
+            this.buildings.EditBuilding(id, model.Contract, model.Address, model.ServiceStartDate, model.ServiceEndDate, model.ManagerId, model.ImageUrl);
 
             return this.RedirectToAction(nameof(BuildingsController.Index));
         }

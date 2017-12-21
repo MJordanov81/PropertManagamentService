@@ -5,5 +5,7 @@
         public const int ItemsPerPageBuildings = 5;
 
         public const int ItemsPerPageUtilities = 4;
+
+        public const int ItemsPerPageBills = 15;
     }
 }

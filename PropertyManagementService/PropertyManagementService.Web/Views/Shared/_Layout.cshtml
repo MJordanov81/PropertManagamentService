@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -7,6 +9,7 @@
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/b_theme.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/custom.css" />
     </environment>
@@ -17,6 +20,7 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
+
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
@@ -40,13 +44,14 @@
                                 <li><a asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a></li>
                             </ul>
                         </li>
-                    }
+                    }                    
                     @if (this.User.IsInRole("Manager"))
                     {
                         <li class="dropdown">
                             <a class="dropdown-toggle" role="button" aria-expanded="false" href="#" data-toggle="dropdown">Manager <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a asp-area="Manager" asp-controller="Buildings" asp-action="Index">Buildings</a></li>
+   
                             </ul>
                         </li>
                     }
@@ -60,7 +65,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2017 - PropertyManagementService.Web</p>
+            <p>&copy; 2017 - Property Management System</p>
         </footer>
     </div>
 

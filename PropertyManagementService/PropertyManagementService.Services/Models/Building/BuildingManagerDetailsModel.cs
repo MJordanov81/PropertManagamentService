@@ -34,6 +34,8 @@
 
         public int UtilitiesCount { get; set; }
 
+        public string ImageUrl { get; set; }
+
         public ICollection<ApartmentListModel> Apartments { get; set; } = new List<ApartmentListModel>();
 
         public void Configure(Profile profile)

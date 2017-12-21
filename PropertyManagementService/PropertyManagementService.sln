@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyManagementService.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyManagementService.Common", "PropertyManagementService.Common\PropertyManagementService.Common.csproj", "{B733F8B1-8444-41C7-A981-EC373C8F14F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyManagementService.Web.Test", "PropertyManagementServce.Web.Test\PropertyManagementService.Web.Test.csproj", "{C1449F75-0B6F-44ED-B834-01A8E937675E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyManagementService.Services.Test", "PropertyManagementService.Services.Test\PropertyManagementService.Services.Test.csproj", "{CA3CCB29-728C-4B4E-B976-AA904FBDF664}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{B733F8B1-8444-41C7-A981-EC373C8F14F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B733F8B1-8444-41C7-A981-EC373C8F14F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B733F8B1-8444-41C7-A981-EC373C8F14F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1449F75-0B6F-44ED-B834-01A8E937675E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1449F75-0B6F-44ED-B834-01A8E937675E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1449F75-0B6F-44ED-B834-01A8E937675E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1449F75-0B6F-44ED-B834-01A8E937675E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA3CCB29-728C-4B4E-B976-AA904FBDF664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA3CCB29-728C-4B4E-B976-AA904FBDF664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA3CCB29-728C-4B4E-B976-AA904FBDF664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA3CCB29-728C-4B4E-B976-AA904FBDF664}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

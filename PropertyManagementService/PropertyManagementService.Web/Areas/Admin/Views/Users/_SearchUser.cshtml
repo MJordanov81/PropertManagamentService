@@ -1,17 +1,29 @@
 ﻿@model UserSearchModel
 
-<div class="searchBar col-md-offset-6 col-md-6">
-    <div>
+<div class="searchBar">
+    <span style="margin-right: 15px">
         @foreach (var role in Model.IncludedRoles)
         {
             string isChecked = role.Value ? "checked" : "";
-
-            @role.Key <input class="checkbox-inline" type="checkbox" name="roles" value=@role.Key @isChecked />
+            <input class="checkbox-inline" type="checkbox" name="roles" value=@role.Key @isChecked />@role.Key
         }
-    </div>
+    </span>
 
     <input hidden type="text" name="page" value="1" />
-    <input type="search" placeholder="search users..." name="search" value=@Model.SearchString />
-    <input class="btn btn-info" type="submit" value="Search" />
+
+    <div class="col-sm-6 pull-right">
+        <div class="row">
+
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for..." name="search" value=@Model.SearchString>
+                <span class="input-group-btn">
+                    <input class="btn btn-info" type="submit" value="Search" />
+                </span>
+            </div>
+
+            @*<input type="search" placeholder="search users..." name="search" value=@Model.SearchString />
+            <input class="btn btn-info" type="submit" value="Search" />*@
+        </div>
+    </div>
 </div>
 

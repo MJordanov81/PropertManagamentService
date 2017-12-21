@@ -162,5 +162,10 @@
                 .ProjectTo<OwnerNameModel>()
                 .ToList();
         }
+
+        public IEnumerable<string> GetRolesNamesForUser(string userName)
+        {
+            return this.db.Users.Where(u => u.UserName == userName).SelectMany(u => u.RolesNames.Select(r => r.RoleName));
+        }
     }
 }

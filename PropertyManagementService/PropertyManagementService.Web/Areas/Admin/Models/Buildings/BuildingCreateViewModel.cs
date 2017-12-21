@@ -28,6 +28,10 @@
         [Display(Name = "Manager")]
         public string ManagerId { get; set; }
 
+        [Display(Name = "Image")]
+        [DataType(DataType.ImageUrl)]
+        public string ImageUrl { get; set; }
+
         public IEnumerable<UserEmailModel> Managers { get; set; } = new List<UserEmailModel>();
     }
 }

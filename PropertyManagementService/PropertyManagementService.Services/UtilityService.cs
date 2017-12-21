@@ -39,13 +39,13 @@
 
         public void Create(string currentUserId, string name, string description, decimal price, bool isSubscribable, Routine routine, bool isPerResident, int buildingId)
         {
-            if (this.db.BuildingUtilities.Any(u => u.Name == name))
+            if (this.db.BuildingUtilities.Any(u => u.Name == name && u.BuildingId == buildingId))
             {
                 throw new ArgumentException($"Utility with name {name} already exists.");
             }
             if (this.db.Buildings.Find(buildingId).ManagerId != currentUserId)
             {
-                throw new InvalidOperationException($"Cannot add utilities to building.");
+                throw new InvalidOperationException($"No Authorization!");
             }
 
             this.db.BuildingUtilities.Add(new BuildingUtility

@@ -28,9 +28,6 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<BuildingUtility>()
-                .HasAlternateKey(u => u.Name);
-
             builder.Entity<Apartment>()
                 .HasAlternateKey(a => a.Number);
 

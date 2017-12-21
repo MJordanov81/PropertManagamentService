@@ -3,3 +3,59 @@
 }
 
 
+@if (this.User.IsInRole("Admin"))
+{
+    <h2>Admin panel</h2>
+
+    <div class="row" style="margin-top: 30px">
+        <div class="col-sm-offset-2 col-sm-3"  style="background-color:#303030; padding:15px;">
+            <a class="indexCard" asp-area="Admin" asp-controller="Buildings" asp-action="Index" style=" text-decoration-line:none;">
+                <div style="text-align:center">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKt97s-WIBgk4-R6QcCJ1kB69cdBqUFgBI1UhpOmyIMjR5_V7Ahw" alt="Buildings" style="height:150px; width:130px">
+                    <h4><b>Buildings</b></h4>
+                    <p>Create and edit buildings</p>
+                </div>
+
+            </a>
+        </div>
+
+        <div class="col-sm-offset-2 col-sm-3"  style="background-color:#303030; padding:15px; text-decoration-line:none;">
+            <a class="indexCard " asp-area="Admin" asp-controller="Users" asp-action="Index" style=" text-decoration-line:none;">
+                <div style="text-align:center">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpl1cU5Pcc3_2XTCMcmC1lwfI_F1LiaIJl1ii1PNlj1yEQXLP-8A" alt="Users" style="height:150px; width:130px">
+                    <h4><b>Users</b></h4>
+                    <p>Edit user roles</p>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+
+}else if (this.User.IsInRole("Manager"))
+{
+    <h2>Manager panel</h2>
+
+    <div class="row" style="margin-top: 30px">
+        <div class="col-sm-offset-2 col-sm-3" style="background-color:#303030; padding:15px;">
+            <a class="indexCard" asp-area="Manager" asp-controller="Buildings" asp-action="Index" style=" text-decoration-line:none;">
+                <div style="text-align:center">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKt97s-WIBgk4-R6QcCJ1kB69cdBqUFgBI1UhpOmyIMjR5_V7Ahw" alt="Buildings" style="height:150px; width:130px">
+                    <h4><b>Buildings</b></h4>
+                    <p>Manage buildings</p>
+                </div>
+
+            </a>
+        </div>
+
+    </div>
+
+
+}
+else {
+    <div class="container">
+        <div class="row">
+            <img src="https://wallpaperscraft.com/image/architecture_city_view_from_above_buildings_river_118446_1920x1080.jpg" style="width:1150px; height:500px" />
+        </div>
+    </div>
+}

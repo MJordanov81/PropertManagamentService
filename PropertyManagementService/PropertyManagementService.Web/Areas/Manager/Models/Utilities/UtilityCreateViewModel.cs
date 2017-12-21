@@ -18,6 +18,7 @@
         [Range(0, double.MaxValue)]
         public decimal Price { get; set; }
 
+        [Display(Name = "Routine: ")]
         public Routine Routine { get; set; }
 
         [Display(Name = "Is calculated per resident?")]

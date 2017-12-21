@@ -30,8 +30,8 @@
             profile.CreateMap<Apartment, ApartmentListModel>()
                 .ForMember(m => m.OwnerName, cfg => cfg.MapFrom(a => a.Owner.Name))
                 .ForMember(m => m.UnsubscribedUtilities, cfg => cfg.MapFrom(a => a.UnsubscribedUtilities.Count))
-                .ForMember(m => m.UnpaidBillsAmount, cfg => cfg.MapFrom(a => a.Bills.Where(b => !b.IsPaid).Sum(b => b.TotalAmount)))
-                .ForMember(m => m.UnpaidBills, cfg => cfg.MapFrom(a => a.Bills.Where(b => !b.IsPaid).Count()));
+                .ForMember(m => m.UnpaidBillsAmount, cfg => cfg.MapFrom(a => a.Bills.Where(b => !b.IsPaid && b.IsConfirmed).Sum(b => b.TotalAmount)))
+                .ForMember(m => m.UnpaidBills, cfg => cfg.MapFrom(a => a.Bills.Where(b => !b.IsPaid && b.IsConfirmed).Count()));
         }
     }
 }

@@ -10,6 +10,7 @@
     using PropertyManagementService.Domain;
     using PropertyManagementService.Services.Contracts;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -23,6 +24,7 @@
         private readonly SignInManager<User> signInManager;
         private readonly ILogger logger;
         private readonly IUserService users;
+
 
         public AccountController(
             UserManager<User> userManager,
@@ -66,7 +68,7 @@
                 if (result.Succeeded)
                 {
                     this.logger.LogInformation("User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToLocal(returnUrl, model.Email);
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -221,7 +223,7 @@
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = model.Email, Email = model.Email, Name = model.Name};
+                var user = new User { UserName = model.Email, Email = model.Email, Name = model.Name };
 
                 var result = await this.userManager.CreateAsync(user, model.Password);
 
@@ -276,7 +278,7 @@
                 await this.userManager.UpdateAsync(user);
             }
 
-            
+
         }
 
         [HttpPost]
@@ -493,7 +495,7 @@
             }
         }
 
-        private IActionResult RedirectToLocal(string returnUrl)
+        private IActionResult RedirectToLocal(string returnUrl, string userName = "")
         {
             if (Url.IsLocalUrl(returnUrl))
             {

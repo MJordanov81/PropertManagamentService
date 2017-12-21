@@ -1,0 +1,11 @@
+﻿@model BillSearchModel
+
+<div class="row">
+    <div class="searchBar col-sm-4">
+        <form method="get" asp-area="Manager" asp-controller="Bills" asp-action="Index" asp-route-id=@Model.BuildingId>
+            <input hidden type="text" name="page" value="1" />
+            <input type="search" placeholder="search apartments..." name="search" value=@Model.SearchString />
+            <input class="btn btn-info" type="submit" value="Search" />
+        </form>
+    </div>
+</div>

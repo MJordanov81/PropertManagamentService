@@ -6,9 +6,11 @@
     using Models.Bill;
     using PropertyManagementService.Data;
     using PropertyManagementService.Domain;
+    using PropertyManagementService.Domain.Infrastructure.Enum;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     public class BillService : IBillService
     {
@@ -19,41 +21,76 @@
             this.db = db;
         }
 
-        public BillsForBuildingModel GetBillsForBuilding(int buildingId, bool isConfirmed = true)
+        public BillsForBuildingModel GetBillsForBuilding(string search, int buildingId, bool isConfirmed = true)
         {
-            Building building =  this.db.Buildings
+            Func<string, bool> searchPredicate = (appartmentNumber)
+                => appartmentNumber.ToLower().Contains(search.ToLower());
+
+            Building building = this.db.Buildings
                 .Where(b => b.Id == buildingId)
                 .SingleOrDefault();
 
             if (building == null)
             {
-                throw new ArgumentException($"Cannot find building with id {building}");
+                throw new ArgumentException($"Cannot find building with id {buildingId}");
             }
 
-            BillsForBuildingModel mappedBuilding = Mapper.Map<BillsForBuildingModel>(building);
-
-            var billss = this.db.Buildings.Where(b => b.Id == buildingId).SelectMany(b => b.Apartments.SelectMany(a => a.Bills)).ToList();
+            BillsForBuildingModel mappedBuilding = this.db.Buildings
+                .Where(b => b.Id == buildingId)
+                .ProjectTo<BillsForBuildingModel>()
+                .FirstOrDefault();
 
             mappedBuilding.Bills = this.db.Buildings
                 .Where(b => b.Id == buildingId)
-                .SelectMany(b => b.Apartments.SelectMany(a => a.Bills.Where(bill => !bill.IsPaid && bill.IsConfirmed == isConfirmed)))
+                .SelectMany(b => b.Apartments.SelectMany(a => a.Bills.Where(bill => !bill.IsPaid && bill.IsConfirmed == isConfirmed && searchPredicate(bill.Apartment.Number))))
                 .OrderBy(bill => bill.DueDate).AsQueryable().ProjectTo<BillManagerListModel>().ToList();
+
+            mappedBuilding.ItemsCount = mappedBuilding.Bills.Count;
+
+            if (search != string.Empty)
+            {
+                mappedBuilding.UnpaidBillsAmount = mappedBuilding.Bills.Where(b => searchPredicate(b.Apartment)).Sum(b => b.TotalAmount);
+
+                mappedBuilding.UnpaidBills = mappedBuilding.Bills.Where(b => searchPredicate(b.Apartment)).Count();
+            }
 
             return mappedBuilding;
         }
 
-        public void GenerateBills(int buildingId, int period, int year)
+        public void GenerateBills(string currentUserId, int buildingId, int period, int year)
         {
+            string buildingManagerId = this.db.Buildings.Find(buildingId).ManagerId;
+
+            if (currentUserId != buildingManagerId)
+            {
+                throw new InvalidOperationException("No authorization!");
+            }
+
+            //Get all apartments without a bill(either confirmed or not) for the given period
             IList<int> apartmentsWithoutBills = this.db.Buildings
                 .Where(b => b.Id == buildingId)
                 .Select(b => b.Apartments.Where(a => !a.Bills.Any(bill => bill.Period == period && bill.Year == year)).Select(a => a.Id))
                 .FirstOrDefault()
                 .ToList();
 
-            IList<int> utilities = this.db.BuildingUtilities
-                .Where(u => u.BuildingId == buildingId)
+            //Get all utilities for the given building
+            IList<int> utilities = new List<int>();
+
+            //If period = 0 get utilities paid yearly or else those paid on monthly basis
+            if (period == 0)
+            {
+                utilities = this.db.BuildingUtilities
+                .Where(u => u.BuildingId == buildingId && u.Routine == Routine.Yearly)
                 .Select(u => u.Id)
                 .ToList();
+            }
+            else
+            {
+                utilities = this.db.BuildingUtilities
+                .Where(u => u.BuildingId == buildingId && u.Routine == Routine.Monthly)
+                .Select(u => u.Id)
+                .ToList();
+            }
 
             if (apartmentsWithoutBills.Count < 1)
             {
@@ -66,6 +103,9 @@
 
             foreach (var apartmentId in apartmentsWithoutBills)
             {
+                //Apartment
+                Apartment apartment = this.db.Apartments.Find(apartmentId);
+
                 Bill bill = new Bill
                 {
                     Year = year,
@@ -73,7 +113,7 @@
                     DueDate = DateTime.Now.AddDays(30),
                     ApartmentId = apartmentId,
                     TotalAmount = 0
-                    
+
                 };
 
                 this.db.Bills.Add(bill);
@@ -84,8 +124,12 @@
 
                 foreach (var utilityId in utilities)
                 {
+                    //Calculate only if utility is not unsubscribed
                     if (!this.db.UnsubscribedUtilities.Any(u => u.BuildingUtilityId == utilityId && u.ApartmentId == apartmentId))
                     {
+                        //Utility
+                        BuildingUtility utility = this.db.BuildingUtilities.Find(utilityId);
+
                         BillUtility billedUtility = new BillUtility
                         {
                             BillId = bill.Id,
@@ -96,7 +140,14 @@
 
                         this.db.SaveChanges();
 
-                        totalAmount += this.db.BuildingUtilities.Find(utilityId).Price;
+                        if (utility.IsPerResident)
+                        {
+                            totalAmount += utility.Price * apartment.Residents;
+                        }
+                        else
+                        {
+                            totalAmount += utility.Price;
+                        }
                     }
                 }
 
@@ -104,6 +155,75 @@
 
                 this.db.SaveChanges();
             }
+        }
+
+        public async Task<int> DeleteMultiple(string currentUserId, int[] billsIds)
+        {
+            string buildingManagerId = this.db.Bills
+                .Where(b => b.Id == billsIds[0])
+                .Select(b => b.Apartment.Building.ManagerId)
+                .FirstOrDefault();
+
+            if (currentUserId != buildingManagerId)
+            {
+                throw new InvalidOperationException("No authorization!");
+            }
+
+            int deletedBills = 0;
+
+            foreach (var billId in billsIds)
+            {
+                Bill bill = this.db.Bills.Find(billId);
+
+                if (bill != null)
+                {
+
+                    BillUtility[] billUtilities = this.db.BillUtilities.Where(bu => bu.BillId == billId).ToArray();
+
+                    this.db.BillUtilities.RemoveRange(billUtilities);
+
+                    await this.db.SaveChangesAsync();
+
+                    this.db.Bills.Remove(this.db.Bills.Find(billId));
+
+                    await this.db.SaveChangesAsync();
+
+                    deletedBills++;
+                }
+            }
+
+            return deletedBills;
+        }
+
+        public async Task<int> ConfirmMultiple(string currentUserId, int[] billsIds)
+        {
+            string buildingManagerId = this.db.Bills
+                .Where(b => b.Id == billsIds[0])
+                .Select(b => b.Apartment.Building.ManagerId)
+                .FirstOrDefault();
+
+            if (currentUserId != buildingManagerId)
+            {
+                throw new InvalidOperationException("No authorization!");
+            }
+
+            int confirmedBills = 0;
+
+            foreach (var billId in billsIds)
+            {
+                Bill bill = this.db.Bills.Find(billId);
+
+                if (bill != null)
+                {
+                    bill.IsConfirmed = true;
+
+                    confirmedBills++;
+                }
+            }
+
+            await this.db.SaveChangesAsync();
+
+            return confirmedBills;
         }
     }
 }

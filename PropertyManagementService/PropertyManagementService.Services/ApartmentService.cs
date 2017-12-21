@@ -1,7 +1,6 @@
 ﻿namespace PropertyManagementService.Services
 {
     using Contracts;
-    using Microsoft.EntityFrameworkCore;
     using PropertyManagementService.Data;
     using PropertyManagementService.Domain;
     using System;
@@ -18,7 +17,7 @@
 
         public void Create(string number, int residents, int dogs, int area, string ownerId, int buildingId)
         {
-            if (!this.db.Buildings.Any(b => b.Id == buildingId || !this.db.Users.Any(u => u.Id == ownerId)))
+            if (!this.db.Buildings.Any(b => b.Id == buildingId) || !this.db.Users.Any(u => u.Id == ownerId))
             {
                 throw new ArgumentException("User or building with given ids do not exist.");
             }

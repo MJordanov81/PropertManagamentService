@@ -2,71 +2,87 @@
 
 @{
     ViewData["Title"] = "Bills";
+    string searchString = Model.Search == "" ? null : Model.Search;
 }
 
-<div class="row">
-    <div class="col-sm-12">
 
+<div class="row">
+    <div class="col-sm-6">
+        <h4>Outstanding bills: <span class="label label-danger">@Model.UnpaidBills</span>    Outstanding amount: <span class="label label-danger">@Model.UnpaidBillsAmount</span></h4>
+    </div>
+    <div>
+        <div class="pull-right">
+            <a class="btn btn-success" asp-area="Manager" asp-controller="Bills" asp-action="Generate" asp-route-id="@Model.BuildingId">Generate bills</a>
+            <a class="btn btn-info disabled" asp-area="Manager" asp-controller="Bills" asp-action="Pay">Pay bills</a>
+        </div>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-sm-6">
-        Outstanding bills: @Model.UnpaidBills
-        <br />
-        Outstanding amount @Model.UnpaidBillsAmount
+    <div class="col-sm-12 table-title">
+        <div class="col-sm-8">
+            <h3> Outstanding bills </h3>
+        </div>
+        @Html.Partial("_SearchBill", new BillSearchModel { BuildingId = Model.BuildingId, SearchString = searchString })
     </div>
-    <div class="col-sm-6">
-        <a class="btn btn-lg btn-success" asp-area="Manager" asp-controller="Bills" asp-action="Generate" asp-route-id="@Model.BuildingId">Generate bills</a>
 
-        <a class="btn btn-lg btn-info" asp-area="Manager" asp-controller="Bills" asp-action="Pay">Pay bills</a>
-    </div>
-    <div class="col-sm-12">
-        <h3>
-            Outstanding bills
-        </h3>
-        <table class="table table-bordered table-condensed">
-            <thead>
-                <tr>
-                    <th>
-                        Apartment
-                    </th>
-                    <th>
-                        Amount
-                    </th>
-                    <th>
-                        Due
-                    </th>
-                    <th>
-                        For period
-                    </th>
-                    <th>
-                        For year
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var bill in Model.Bills)
-                {
+
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-bordered table-condensed">
+                <thead>
                     <tr>
-                        <td>
-                            @bill.Apartment
-                        </td>
-                        <td>
-                            @bill.TotalAmount
-                        </td>
-                        <td>
-                            @bill.DueDate.ToShortDateString()
-                        </td>
-                        <td>
-                            @bill.Period
-                        </td>
-                        <td>
-                            @bill.Year
-                        </td>
+                        <th>
+                            Apartment
+                        </th>
+                        <th>
+                            Amount
+                        </th>
+                        <th>
+                            Due
+                        </th>
+                        <th>
+                            For period
+                        </th>
+                        <th>
+                            For year
+                        </th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var bill in Model.Bills)
+                    {
+                        <tr>
+                            <td>
+                                @bill.Apartment
+                            </td>
+                            <td>
+                                @bill.TotalAmount
+                            </td>
+                            <td>
+                                @bill.DueDate.ToShortDateString()
+                            </td>
+                            <td>
+                                @bill.Period
+                            </td>
+                            <td>
+                                @bill.Year
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
+    
 </div>
+
+@Html.Partial("_PagingBill", Model)
+
+<a class="btn btn-default" style="margin-top:15px" asp-area="Manager" asp-controller="Buildings" asp-action="Details" asp-route-id=@Model.BuildingId>Back</a>
+
+
+
+

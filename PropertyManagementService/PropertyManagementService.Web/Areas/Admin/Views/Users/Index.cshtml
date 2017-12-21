@@ -6,64 +6,86 @@
 }
 
 <div class="row">
-    <form method="get" asp-area="Admin" asp-controller="Users" asp-action="Index">
 
-        @Html.Partial("_SearchUser", new UserSearchModel { IncludedRoles = Model.IncludedRoles, SearchString = searchString })
+</div>
 
-    </form>
+<div class="row">
+    <div class="col-sm-12 table-title">
+        <div class="col-sm-3">
+            <h3> Users </h3>
+        </div>
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="pull-right">
+                    <form method="get" asp-area="Admin" asp-controller="Users" asp-action="Index">
+
+                        @Html.Partial("_SearchUser", new UserSearchModel { IncludedRoles = Model.IncludedRoles, SearchString = searchString })
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped table-hover indexTable">
+            <thead>
+                <tr>
+                    <th class="col-xs-3">
+                        Name
+                    </th>
+                    <th class="col-xs-3">
+                        Email
+                    </th>
+                    <th class="col-xs-2">
+                        Buildings as manager
+                    </th>
+                    <th class="col-xs-2">
+                        Apartments as owner
+                    </th>
+                    <th class="col-xs-1">
+                        Roles
+                    <th class="col-xs-1">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td>
+                            @user.Name
+                        </td>
+                        <td>
+                            @user.Email
+                        </td>
+                        <td>
+                            @user.BuildingsAsManager
+                        </td>
+                        <td>
+                            @user.ApartmentsAsOwner
+                        </td>
+                        <td class="role">
+                            @foreach (var role in user.Roles)
+                            {
+                                <p>@role</p>
+                            }
+                            @*@(string.Join(Environment.NewLine, user.Roles))*@
+                        </td>
+                        <td>
+                            <div>
+                                <a class="btn btn-sm btn-warning" asp-area="Admin" asp-controller="Users" asp-action="Edit" asp-route-id=@user.Id>Edit</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 
 
-<table class="table table-bordered table-striped table-hover indexTable">
-    <thead>
-        <tr>
-            <th class="col-xs-3">
-                Name
-            </th>
-            <th class="col-xs-3">
-                Email
-            </th>
-            <th class="col-xs-1">
-                Buildings as manager
-            </th>
-            <th class="col-xs-1">
-                Apartments as owner
-            </th>
-            <th class="col-xs-1">
-                Roles
-            <th class="col-xs-1">
-                Action
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model.Users)
-        {
-            <tr>
-                <td>
-                    @user.Name
-                </td>
-                <td>
-                    @user.Email
-                </td>
-                <td>
-                    @user.BuildingsAsManager
-                </td>
-                <td>
-                    @user.ApartmentsAsOwner
-                </td>
-                <td>
-                    @(string.Join(Environment.NewLine, user.Roles))
-                </td>
-                <td>
-                    <div>
-                        <a class="btn btn-sm btn-warning" asp-area="Admin" asp-controller="Users" asp-action="Edit" asp-route-id=@user.Id>Edit</a>
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
 @Html.Partial("_PagingUser", Model)
+
+<a class="btn btn-default" style="margin-top:15px" asp-area="" asp-controller="" asp-action="">Back</a>

@@ -184,6 +184,8 @@ namespace PropertyManagementService.Data.Migrations
                     b.Property<string>("Contract")
                         .IsRequired();
 
+                    b.Property<string>("ImageUrl");
+
                     b.Property<string>("ManagerId");
 
                     b.Property<DateTime?>("ServiceEndDate");
@@ -221,8 +223,6 @@ namespace PropertyManagementService.Data.Migrations
                     b.Property<int>("Routine");
 
                     b.HasKey("Id");
-
-                    b.HasAlternateKey("Name");
 
                     b.HasIndex("BuildingId");
 

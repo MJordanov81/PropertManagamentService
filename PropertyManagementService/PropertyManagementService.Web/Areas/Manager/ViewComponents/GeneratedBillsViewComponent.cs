@@ -16,7 +16,7 @@
 
         public IViewComponentResult Invoke(int id)
         {
-            BillsForBuildingModel bills = this.bills.GetBillsForBuilding(id, false);
+            BillsForBuildingModel bills = this.bills.GetBillsForBuilding(string.Empty, id, false);
 
             return View(bills);
         }

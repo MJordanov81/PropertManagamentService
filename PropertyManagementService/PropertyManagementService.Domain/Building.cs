@@ -22,6 +22,8 @@
 
         public User Manager { get; set; }
 
+        public string ImageUrl { get; set; }
+
         public ICollection<Apartment> Apartments { get; set; } = new List<Apartment>();
 
         public ICollection<BuildingUtility> Utilities { get; set; } = new List<BuildingUtility>();

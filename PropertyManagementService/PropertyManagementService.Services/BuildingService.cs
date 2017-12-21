@@ -17,7 +17,7 @@
             this.db = db;
         }
 
-        public void Create(string contract, string address, DateTime serviceStartDate, DateTime? serviceEndDate, string managerId)
+        public void Create(string contract, string address, DateTime serviceStartDate, DateTime? serviceEndDate, string managerId, string imageUrl)
         {
             this.db.Add(new Building
             {
@@ -25,13 +25,14 @@
                 Address = address,
                 ServiceStartDate = serviceStartDate,
                 ServiceEndDate = serviceEndDate,
-                ManagerId = managerId
+                ManagerId = managerId,
+                ImageUrl = imageUrl
             });
 
             db.SaveChanges();
         }
 
-        public void EditBuilding(int buildingId, string contract, string address, DateTime serviceStartDate, DateTime? serviceEndDate, string managerId)
+        public void EditBuilding(int buildingId, string contract, string address, DateTime serviceStartDate, DateTime? serviceEndDate, string managerId, string imageUrl)
         {
             Building building = this.db.Buildings.Find(buildingId);
 
@@ -40,6 +41,7 @@
             building.ServiceStartDate = serviceStartDate;
             building.ServiceEndDate = serviceEndDate;
             building.ManagerId = managerId;
+            building.ImageUrl = imageUrl;
 
             this.db.SaveChanges();
         }

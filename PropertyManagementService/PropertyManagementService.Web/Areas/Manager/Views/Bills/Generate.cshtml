@@ -4,41 +4,48 @@
     ViewData["Title"] = "Generate Bills";
 }
 
-<div class="row">
-    <div class="col-sm-12">
 
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-sm-12">
-        Generate bills for period
-        <form method="POST" asp-area="Manager" asp-controller="Bills" asp-action="Generate">
+<div class="col-sm-12 bill-generator">
+    <h3 class="col-sm-5">Generate bills for period</h3>
+    <div class="col-sm-7 dark-grey text-center">
+        <form method="POST" asp-area="Manager" asp-controller="Bills" asp-action="Generate" class="form-inline">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div hidden>
                 <input name="buildingId" value=@Model />
             </div>
-            <label>Period: <input class="form-control" type="number" min="0" max="12" step="1" name="period" /></label>
-            <label>Year: <input class="form-control" type="number" min=@DateTime.Now.Year step="1" name="year" /></label>
-            <input class="form-control" type="submit" value="Generate" />
+            <div class="form-group">
+                <label>Period:</label>
+                <input required class="form-control" type="number" min="0" max="12" step="1" name="period"/>
+            </div>
+            <div class="form-group">
+                <label>Year:</label>
+                <input required class="form-control" type="number" min=@DateTime.Now.Year step="1" name="year" />
+            </div>
+            <input class="btn btn-default" type="submit" value="Generate" />
         </form>
     </div>
+</div>
 
 
-    <div class="col-sm-12">
-        <div>
+<div class="row">
+    <div class="col-sm-12 table-title">
+        <div class="col-sm-5">
+            <h3> Not confirmed bills </h3>
+        </div>
+        <div class="pull-right">
+            <p id="affectedBills" class="label label-danger affectedBills-label"></p>
             <a id="confirmButton" class="btn btn btn-info">Confirm selected</a>
             <a id="deleteButton" class="btn btn btn-info">Delete selected</a>
         </div>
-        <h3>
-            Not confirmed bills
-        </h3>
+    </div>
+    <div class="col-sm-12">
         <div id="container">
             @await Component.InvokeAsync("GeneratedBills", new { id = Model })
         </div>
-
     </div>
 </div>
+
 
 @section Scripts {
 
@@ -49,10 +56,9 @@
             $(":checked").each(function () {
                 data['bills'].push($(this).val());
             });
-            $.post("/manager/bills/deleteMultiple", data);
-
-            $("#container").load('/manager/bills/updateGeneratedBills/' + @Model);
-
+            $.post("/manager/bills/deleteMultiple", data, function (receivedData, status) {
+                GetAffectedRows(receivedData)
+            });
         });
 
         $('#confirmButton').click(function () {
@@ -61,10 +67,32 @@
             $(":checked").each(function () {
                 data['bills'].push($(this).val());
             });
-            $.post("/manager/bills/confirmMultiple", data);
+            $.post("/manager/bills/confirmMultiple", data, function (receivedData, status) {
+                GetAffectedRows(receivedData);
+            });
+        });
+
+        function GetAffectedRows(receivedData) {
+
+            let message = "bills have been affected."
+
+            if (receivedData == 1) {
+                message = "bill have been affected."
+            }
+
+            $("#container").load('/manager/bills/updateGeneratedBills/' + @Model);
+
+            $('#affectedBills').html(receivedData + " " + message);
+        }
+
+
+        $("#container").on('change', '#select-all', function () {
+            $(':checkbox').prop('checked', $(this).prop("checked"));
         });
 
     </script>
 
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }
+
+<a class="btn btn-default" style="margin-top:15px" asp-area="Manager" asp-controller="Bills" asp-action="Index" asp-route-id=@Model>Back</a>
