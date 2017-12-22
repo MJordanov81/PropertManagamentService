@@ -11,5 +11,9 @@
         public const string NoInvoicesError = "All bills have been invoiced";
 
         public const string NoUtitlitiesError = "There are no utilities to invoice.";
+
+        public const string CannotFindBuildingWithIdError = "Cannot find building with id {0}";
+
+        public const string UtilityAlreadyExists = "Utility with name {0} already exists.";
     }
 }

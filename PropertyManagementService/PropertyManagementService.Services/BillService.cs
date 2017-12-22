@@ -33,7 +33,7 @@
 
             if (building == null)
             {
-                throw new ArgumentException($"Cannot find building with id {buildingId}");
+                throw new ArgumentException(string.Format(Constants.CannotFindBuildingWithIdError, buildingId));
             }
 
             BillsForBuildingModel mappedBuilding = this.db.Buildings

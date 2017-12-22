@@ -42,7 +42,7 @@
         {
             if (this.db.BuildingUtilities.Any(u => u.Name == name && u.BuildingId == buildingId))
             {
-                throw new ArgumentException($"Utility with name {name} already exists.");
+                throw new ArgumentException(string.Format(Constants.UtilityAlreadyExists, name));
             }
             if (this.db.Buildings.Find(buildingId).ManagerId != currentUserId)
             {
