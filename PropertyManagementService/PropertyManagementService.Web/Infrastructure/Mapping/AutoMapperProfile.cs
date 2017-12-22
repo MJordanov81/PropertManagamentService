@@ -9,13 +9,11 @@
 
     public class AutoMapperProfile : Profile
     {
-        private const string SolutionName = "PropertyManagementService";
-
         public AutoMapperProfile()
         {
             IEnumerable<Assembly> assemblies = AppDomain.CurrentDomain
                 .GetAssemblies()
-                .Where(x => x.FullName.Contains(SolutionName));
+                .Where(x => x.FullName.Contains(Constants.Constants.SolutionName));
 
             IEnumerable<Type> types = assemblies
                 .SelectMany(a => a.GetTypes().Where(t => t.IsClass && !t.IsAbstract))

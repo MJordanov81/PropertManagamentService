@@ -7,5 +7,7 @@
         public const int ItemsPerPageUtilities = 4;
 
         public const int ItemsPerPageBills = 15;
+
+        public const string SolutionName = "PropertyManagementService";
     }
 }
