@@ -5,7 +5,8 @@
     string searchString = Model.Search == "" ? null : Model.Search;
 }
 
-<h2>Utilities</h2>
+@section PageHeader{ 
+    <h2>Utilities</h2>
 
 <div class="row">
     <div class="col-md-6">
@@ -15,7 +16,7 @@
     @Html.Partial("_SearchUtility", new UtilitySearchModel { SearchString = searchString, BuildingId = Model.BuildingId })
 
 </div>
-
+}
 
 <table class="table table-bordered table-striped table-hover indexTable">
     <thead>
@@ -61,7 +62,7 @@
                 </td>
                 <td>
                     <div>
-                        <a class="btn btn-sm btn-warning" asp-area="Manager" asp-controller="Utilities" asp-action="Edit" asp-route-utilityId=@utility.UtilityId asp-route-buildingId=@Model.BuildingId>Edit</a>
+                        <a disabled class="btn btn-sm btn-warning" asp-area="Manager" asp-controller="Utilities" asp-action="Edit" asp-route-utilityId=@utility.UtilityId asp-route-buildingId=@Model.BuildingId>Edit</a>
                     </div>
                 </td>
             </tr>

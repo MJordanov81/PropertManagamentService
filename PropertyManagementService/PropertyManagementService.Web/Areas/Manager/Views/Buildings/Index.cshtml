@@ -5,7 +5,9 @@
     string searchString = Model.Search == "" ? null : Model.Search;
 }
 
-<h2>Buildings</h2>
+@section PageHeader{
+    <h2>Buildings</h2>
+}
 
 @Html.Partial("_SearchBuilding", searchString)
 

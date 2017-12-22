@@ -5,6 +5,7 @@
     string searchString = Model.Search == "" ? null : Model.Search;
 }
 
+@section PageHeader{
 <div class="row">
     <div class="col-md-6">
         <a class="btn btn-success" asp-area="Admin" asp-controller="Buildings" asp-action="Create">Create</a>
@@ -13,7 +14,7 @@
     @Html.Partial("_SearchBuilding", searchString)
 
 </div>
-
+}
 
 <table class="table table-bordered table-striped table-hover indexTable">
     <thead>

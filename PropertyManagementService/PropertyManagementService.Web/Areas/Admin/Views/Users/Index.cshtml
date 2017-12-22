@@ -5,27 +5,26 @@
     string searchString = Model.Search == "" ? null : Model.Search;
 }
 
-<div class="row">
+@section PageHeader{ 
+<div class="col-sm-12 table-title">
+    <div class="col-sm-3">
+        <h3> Users </h3>
+    </div>
+    <div class="col-sm-9">
+        <div class="row">
+            <div class="pull-right">
+                <form method="get" asp-area="Admin" asp-controller="Users" asp-action="Index">
 
-</div>
+                    @Html.Partial("_SearchUser", new UserSearchModel { IncludedRoles = Model.IncludedRoles, SearchString = searchString })
 
-<div class="row">
-    <div class="col-sm-12 table-title">
-        <div class="col-sm-3">
-            <h3> Users </h3>
-        </div>
-        <div class="col-sm-9">
-            <div class="row">
-                <div class="pull-right">
-                    <form method="get" asp-area="Admin" asp-controller="Users" asp-action="Index">
-
-                        @Html.Partial("_SearchUser", new UserSearchModel { IncludedRoles = Model.IncludedRoles, SearchString = searchString })
-
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
+}
+
+<div class="row">
     <div class="col-sm-12">
         <table class="table table-bordered table-striped table-hover indexTable">
             <thead>
