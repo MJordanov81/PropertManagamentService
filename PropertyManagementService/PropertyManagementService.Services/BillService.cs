@@ -7,6 +7,7 @@
     using PropertyManagementService.Data;
     using PropertyManagementService.Domain;
     using PropertyManagementService.Domain.Infrastructure.Enum;
+    using PropertyManagementService.Services.Infrastructure;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -63,7 +64,7 @@
 
             if (currentUserId != buildingManagerId)
             {
-                throw new InvalidOperationException("No authorization!");
+                throw new InvalidOperationException(Constants.NoAuthorizationError);
             }
 
             //Get all apartments without a bill(either confirmed or not) for the given period
@@ -94,11 +95,11 @@
 
             if (apartmentsWithoutBills.Count < 1)
             {
-                throw new ArgumentException("All bills have been invoiced");
+                throw new ArgumentException(Constants.NoInvoicesError);
             }
             if (utilities.Count < 1)
             {
-                throw new ArgumentException("There are no utilities to invoice.");
+                throw new ArgumentException(Constants.NoUtitlitiesError);
             }
 
             foreach (var apartmentId in apartmentsWithoutBills)
@@ -166,7 +167,7 @@
 
             if (currentUserId != buildingManagerId)
             {
-                throw new InvalidOperationException("No authorization!");
+                throw new InvalidOperationException(Constants.NoAuthorizationError);
             }
 
             int deletedBills = 0;
@@ -204,7 +205,7 @@
 
             if (currentUserId != buildingManagerId)
             {
-                throw new InvalidOperationException("No authorization!");
+                throw new InvalidOperationException(Constants.NoAuthorizationError);
             }
 
             int confirmedBills = 0;

@@ -3,6 +3,7 @@
     using Contracts;
     using PropertyManagementService.Data;
     using PropertyManagementService.Domain;
+    using PropertyManagementService.Services.Infrastructure;
     using System;
     using System.Linq;
 
@@ -19,7 +20,7 @@
         {
             if (!this.db.Buildings.Any(b => b.Id == buildingId) || !this.db.Users.Any(u => u.Id == ownerId))
             {
-                throw new ArgumentException("User or building with given ids do not exist.");
+                throw new ArgumentException(Constants.UserOrBuildingDoNotExistError);
             }
 
             if (!this.db.Buildings
@@ -41,7 +42,7 @@
             }
             else
             {
-                throw new ArgumentException("Apartment with the given number already exists.");
+                throw new ArgumentException(Constants.ApartmentDoesNotExistError);
             }
         }
     }

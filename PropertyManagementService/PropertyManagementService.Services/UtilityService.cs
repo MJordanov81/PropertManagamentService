@@ -6,6 +6,7 @@
     using PropertyManagementService.Data;
     using PropertyManagementService.Domain;
     using PropertyManagementService.Domain.Infrastructure.Enum;
+    using PropertyManagementService.Services.Infrastructure;
     using System;
     using System.Linq;
 
@@ -45,7 +46,7 @@
             }
             if (this.db.Buildings.Find(buildingId).ManagerId != currentUserId)
             {
-                throw new InvalidOperationException($"No Authorization!");
+                throw new InvalidOperationException(Constants.NoAuthorizationError);
             }
 
             this.db.BuildingUtilities.Add(new BuildingUtility
