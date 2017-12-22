@@ -39,7 +39,7 @@
             BillsForBuildingModel mappedBuilding = this.db.Buildings
                 .Where(b => b.Id == buildingId)
                 .ProjectTo<BillsForBuildingModel>()
-                .FirstOrDefault();
+                .SingleOrDefault();
 
             mappedBuilding.Bills = this.db.Buildings
                 .Where(b => b.Id == buildingId)
@@ -71,7 +71,7 @@
             IList<int> apartmentsWithoutBills = this.db.Buildings
                 .Where(b => b.Id == buildingId)
                 .Select(b => b.Apartments.Where(a => !a.Bills.Any(bill => bill.Period == period && bill.Year == year)).Select(a => a.Id))
-                .FirstOrDefault()
+                .SingleOrDefault()
                 .ToList();
 
             //Get all utilities for the given building
@@ -163,7 +163,7 @@
             string buildingManagerId = this.db.Bills
                 .Where(b => b.Id == billsIds[0])
                 .Select(b => b.Apartment.Building.ManagerId)
-                .FirstOrDefault();
+                .SingleOrDefault();
 
             if (currentUserId != buildingManagerId)
             {
@@ -201,7 +201,7 @@
             string buildingManagerId = this.db.Bills
                 .Where(b => b.Id == billsIds[0])
                 .Select(b => b.Apartment.Building.ManagerId)
-                .FirstOrDefault();
+                .SingleOrDefault();
 
             if (currentUserId != buildingManagerId)
             {

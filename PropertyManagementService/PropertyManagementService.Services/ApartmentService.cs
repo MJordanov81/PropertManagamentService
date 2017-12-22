@@ -26,7 +26,7 @@
             if (!this.db.Buildings
                 .Where(b => b.Id == buildingId)
                 .Select(b => b.Apartments.Any(a => a.Number == number))
-                .FirstOrDefault())
+                .SingleOrDefault())
             {
                 this.db.Apartments.Add(new Apartment
                 {

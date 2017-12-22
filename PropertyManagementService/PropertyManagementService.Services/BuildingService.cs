@@ -56,7 +56,7 @@
             return this.db.Buildings
                 .Where(b => b.Id == buildingId)
                 .ProjectTo<BuildingManagerDetailsModel>()
-                .FirstOrDefault();
+                .SingleOrDefault();
         }
 
         public BuildingsPaginatedModel<TModel> GetBuildings<TModel>(string search, string managerId = null)
